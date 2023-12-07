@@ -135,6 +135,9 @@ set_target_properties(${QtPropertyBrowser_LIB_NAME} PROPERTIES
     DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
     VERSION ${QtPropertyBrowser_VERSION}
     EXPORT_NAME ${QtPropertyBrowser_LIB_NAME}
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
 ########################################################
