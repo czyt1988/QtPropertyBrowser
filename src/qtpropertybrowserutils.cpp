@@ -1,41 +1,5 @@
-/****************************************************************************
-**
-** Copyright (C) 2016 The Qt Company Ltd.
-** Contact: https://www.qt.io/licensing/
-**
-** This file is part of the tools applications of the Qt Toolkit.
-**
-** $QT_BEGIN_LICENSE:LGPL$
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see https://www.qt.io/terms-conditions. For further
-** information use the contact form at https://www.qt.io/contact-us.
-**
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 3 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL3 included in the
-** packaging of this file. Please review the following information to
-** ensure the GNU Lesser General Public License version 3 requirements
-** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
-**
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 2.0 or (at your option) the GNU General
-** Public license version 3 or any later version approved by the KDE Free
-** Qt Foundation. The licenses are as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
-** included in the packaging of this file. Please review the following
-** information to ensure the GNU General Public License requirements will
-** be met: https://www.gnu.org/licenses/gpl-2.0.html and
-** https://www.gnu.org/licenses/gpl-3.0.html.
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
+// Copyright (C) 2016 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
 #include "qtpropertybrowserutils_p.h"
 #include <QtWidgets/QApplication>
@@ -49,46 +13,74 @@
 
 QT_BEGIN_NAMESPACE
 
+using namespace Qt::StringLiterals;
+
+// Make sure icons are removed as soon as QApplication is destroyed, otherwise,
+// handles are leaked on X11.
+static void clearCursorDatabase()
+{
+    QtCursorDatabase::instance()->clear();
+}
+
 QtCursorDatabase::QtCursorDatabase()
 {
-    appendCursor(Qt::ArrowCursor, QCoreApplication::translate("QtCursorDatabase", "Arrow"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-arrow.png")));
-    appendCursor(Qt::UpArrowCursor, QCoreApplication::translate("QtCursorDatabase", "Up Arrow"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-uparrow.png")));
-    appendCursor(Qt::CrossCursor, QCoreApplication::translate("QtCursorDatabase", "Cross"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-cross.png")));
-    appendCursor(Qt::WaitCursor, QCoreApplication::translate("QtCursorDatabase", "Wait"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-wait.png")));
-    appendCursor(Qt::IBeamCursor, QCoreApplication::translate("QtCursorDatabase", "IBeam"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-ibeam.png")));
-    appendCursor(Qt::SizeVerCursor, QCoreApplication::translate("QtCursorDatabase", "Size Vertical"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-sizev.png")));
-    appendCursor(Qt::SizeHorCursor, QCoreApplication::translate("QtCursorDatabase", "Size Horizontal"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-sizeh.png")));
-    appendCursor(Qt::SizeFDiagCursor, QCoreApplication::translate("QtCursorDatabase", "Size Backslash"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-sizef.png")));
-    appendCursor(Qt::SizeBDiagCursor, QCoreApplication::translate("QtCursorDatabase", "Size Slash"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-sizeb.png")));
-    appendCursor(Qt::SizeAllCursor, QCoreApplication::translate("QtCursorDatabase", "Size All"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-sizeall.png")));
-    appendCursor(Qt::BlankCursor, QCoreApplication::translate("QtCursorDatabase", "Blank"),
-                 QIcon());
-    appendCursor(Qt::SplitVCursor, QCoreApplication::translate("QtCursorDatabase", "Split Vertical"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-vsplit.png")));
-    appendCursor(Qt::SplitHCursor, QCoreApplication::translate("QtCursorDatabase", "Split Horizontal"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-hsplit.png")));
-    appendCursor(Qt::PointingHandCursor, QCoreApplication::translate("QtCursorDatabase", "Pointing Hand"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-hand.png")));
-    appendCursor(Qt::ForbiddenCursor, QCoreApplication::translate("QtCursorDatabase", "Forbidden"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-forbidden.png")));
-    appendCursor(Qt::OpenHandCursor, QCoreApplication::translate("QtCursorDatabase", "Open Hand"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-openhand.png")));
-    appendCursor(Qt::ClosedHandCursor, QCoreApplication::translate("QtCursorDatabase", "Closed Hand"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-closedhand.png")));
-    appendCursor(Qt::WhatsThisCursor, QCoreApplication::translate("QtCursorDatabase", "What's This"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-whatsthis.png")));
-    appendCursor(Qt::BusyCursor, QCoreApplication::translate("QtCursorDatabase", "Busy"),
-                 QIcon(QLatin1String(":/qt-project.org/qtpropertybrowser/images/cursor-busy.png")));
+    qAddPostRoutine(clearCursorDatabase);
+
+    appendCursor(Qt::ArrowCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Arrow"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-arrow.png"_L1));
+    appendCursor(Qt::UpArrowCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Up Arrow"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-uparrow.png"_L1));
+    appendCursor(Qt::CrossCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Cross"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-cross.png"_L1));
+    appendCursor(Qt::WaitCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Wait"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-wait.png"_L1));
+    appendCursor(Qt::IBeamCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "IBeam"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-ibeam.png"_L1));
+    appendCursor(Qt::SizeVerCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Size Vertical"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-sizev.png"_L1));
+    appendCursor(Qt::SizeHorCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Size Horizontal"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-sizeh.png"_L1));
+    appendCursor(Qt::SizeFDiagCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Size Backslash"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-sizef.png"_L1));
+    appendCursor(Qt::SizeBDiagCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Size Slash"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-sizeb.png"_L1));
+    appendCursor(Qt::SizeAllCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Size All"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-sizeall.png"_L1));
+    appendCursor(Qt::BlankCursor, QCoreApplication::translate("QtCursorDatabase", "Blank"), QIcon());
+    appendCursor(Qt::SplitVCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Split Vertical"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-vsplit.png"_L1));
+    appendCursor(Qt::SplitHCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Split Horizontal"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-hsplit.png"_L1));
+    appendCursor(Qt::PointingHandCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Pointing Hand"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-hand.png"_L1));
+    appendCursor(Qt::ForbiddenCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Forbidden"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-forbidden.png"_L1));
+    appendCursor(Qt::OpenHandCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Open Hand"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-openhand.png"_L1));
+    appendCursor(Qt::ClosedHandCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Closed Hand"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-closedhand.png"_L1));
+    appendCursor(Qt::WhatsThisCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "What's This"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-whatsthis.png"_L1));
+    appendCursor(Qt::BusyCursor,
+                 QCoreApplication::translate("QtCursorDatabase", "Busy"),
+                 QIcon(":/qt-project.org/qtpropertybrowser/images/cursor-busy.png"_L1));
 }
 
 void QtCursorDatabase::clear()
@@ -99,11 +91,11 @@ void QtCursorDatabase::clear()
     m_cursorShapeToValue.clear();
 }
 
-void QtCursorDatabase::appendCursor(Qt::CursorShape shape, const QString &name, const QIcon &icon)
+void QtCursorDatabase::appendCursor(Qt::CursorShape shape, const QString& name, const QIcon& icon)
 {
     if (m_cursorShapeToValue.contains(shape))
         return;
-    const int value = m_cursorNames.count();
+    const int value = m_cursorNames.size();
     m_cursorNames.append(name);
     m_cursorIcons.insert(value, icon);
     m_valueToCursorShape.insert(value, shape);
@@ -115,31 +107,31 @@ QStringList QtCursorDatabase::cursorShapeNames() const
     return m_cursorNames;
 }
 
-QMap<int, QIcon> QtCursorDatabase::cursorShapeIcons() const
+QMap< int, QIcon > QtCursorDatabase::cursorShapeIcons() const
 {
     return m_cursorIcons;
 }
 
-QString QtCursorDatabase::cursorToShapeName(const QCursor &cursor) const
+QString QtCursorDatabase::cursorToShapeName(const QCursor& cursor) const
 {
     int val = cursorToValue(cursor);
     if (val >= 0)
         return m_cursorNames.at(val);
-    return QString();
+    return {};
 }
 
-QIcon QtCursorDatabase::cursorToShapeIcon(const QCursor &cursor) const
+QIcon QtCursorDatabase::cursorToShapeIcon(const QCursor& cursor) const
 {
     int val = cursorToValue(cursor);
     return m_cursorIcons.value(val);
 }
 
-int QtCursorDatabase::cursorToValue(const QCursor &cursor) const
+int QtCursorDatabase::cursorToValue(const QCursor& cursor) const
 {
 #ifndef QT_NO_CURSOR
     Qt::CursorShape shape = cursor.shape();
     if (m_cursorShapeToValue.contains(shape))
-        return m_cursorShapeToValue[shape];
+        return m_cursorShapeToValue[ shape ];
 #endif
     return -1;
 }
@@ -148,12 +140,19 @@ int QtCursorDatabase::cursorToValue(const QCursor &cursor) const
 QCursor QtCursorDatabase::valueToCursor(int value) const
 {
     if (m_valueToCursorShape.contains(value))
-        return QCursor(m_valueToCursorShape[value]);
-    return QCursor();
+        return QCursor(m_valueToCursorShape[ value ]);
+    return {};
 }
 #endif
 
-QPixmap QtPropertyBrowserUtils::brushValuePixmap(const QBrush &b)
+Q_GLOBAL_STATIC(QtCursorDatabase, cursorDatabase)
+
+QtCursorDatabase* QtCursorDatabase::instance()
+{
+    return cursorDatabase();
+}
+
+QPixmap QtPropertyBrowserUtils::brushValuePixmap(const QBrush& b)
 {
     QImage img(16, 16, QImage::Format_ARGB32_Premultiplied);
     img.fill(0);
@@ -162,29 +161,31 @@ QPixmap QtPropertyBrowserUtils::brushValuePixmap(const QBrush &b)
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(0, 0, img.width(), img.height(), b);
     QColor color = b.color();
-    if (color.alpha() != 255) { // indicate alpha by an inset
-        QBrush  opaqueBrush = b;
+    if (color.alpha() != 255) {  // indicate alpha by an inset
+        QBrush opaqueBrush = b;
         color.setAlpha(255);
         opaqueBrush.setColor(color);
-        painter.fillRect(img.width() / 4, img.height() / 4,
-                         img.width() / 2, img.height() / 2, opaqueBrush);
+        painter.fillRect(img.width() / 4, img.height() / 4, img.width() / 2, img.height() / 2, opaqueBrush);
     }
     painter.end();
     return QPixmap::fromImage(img);
 }
 
-QIcon QtPropertyBrowserUtils::brushValueIcon(const QBrush &b)
+QIcon QtPropertyBrowserUtils::brushValueIcon(const QBrush& b)
 {
     return QIcon(brushValuePixmap(b));
 }
 
-QString QtPropertyBrowserUtils::colorValueText(const QColor &c)
+QString QtPropertyBrowserUtils::colorValueText(const QColor& c)
 {
     return QCoreApplication::translate("QtPropertyBrowserUtils", "[%1, %2, %3] (%4)")
-           .arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
+        .arg(c.red())
+        .arg(c.green())
+        .arg(c.blue())
+        .arg(c.alpha());
 }
 
-QPixmap QtPropertyBrowserUtils::fontValuePixmap(const QFont &font)
+QPixmap QtPropertyBrowserUtils::fontValuePixmap(const QFont& font)
 {
     QFont f = font;
     QImage img(16, 16, QImage::Format_ARGB32_Premultiplied);
@@ -200,15 +201,14 @@ QPixmap QtPropertyBrowserUtils::fontValuePixmap(const QFont &font)
     return QPixmap::fromImage(img);
 }
 
-QIcon QtPropertyBrowserUtils::fontValueIcon(const QFont &f)
+QIcon QtPropertyBrowserUtils::fontValueIcon(const QFont& f)
 {
     return QIcon(fontValuePixmap(f));
 }
 
-QString QtPropertyBrowserUtils::fontValueText(const QFont &f)
+QString QtPropertyBrowserUtils::fontValueText(const QFont& f)
 {
-    return QCoreApplication::translate("QtPropertyBrowserUtils", "[%1, %2]")
-           .arg(f.family()).arg(f.pointSize());
+    return QCoreApplication::translate("QtPropertyBrowserUtils", "[%1, %2]").arg(f.family()).arg(f.pointSize());
 }
 
 QString QtPropertyBrowserUtils::dateFormat()
@@ -217,7 +217,7 @@ QString QtPropertyBrowserUtils::dateFormat()
     QString format = loc.dateFormat(QLocale::ShortFormat);
     // Change dd.MM.yy, MM/dd/yy to 4 digit years
     if (format.count(QLatin1Char('y')) == 2)
-        format.insert(format.indexOf(QLatin1Char('y')), QLatin1String("yy"));
+        format.insert(format.indexOf(QLatin1Char('y')), "yy"_L1);
     return format;
 }
 
@@ -236,19 +236,16 @@ QString QtPropertyBrowserUtils::dateTimeFormat()
     return format;
 }
 
-QtBoolEdit::QtBoolEdit(QWidget *parent) :
-    QWidget(parent),
-    m_checkBox(new QCheckBox(this)),
-    m_textVisible(true)
+QtBoolEdit::QtBoolEdit(QWidget* parent) : QWidget(parent), m_checkBox(new QCheckBox(this)), m_textVisible(true)
 {
-    QHBoxLayout *lt = new QHBoxLayout;
+    auto* lt = new QHBoxLayout;
     if (QApplication::layoutDirection() == Qt::LeftToRight)
         lt->setContentsMargins(4, 0, 0, 0);
     else
         lt->setContentsMargins(0, 0, 4, 0);
     lt->addWidget(m_checkBox);
     setLayout(lt);
-    connect(m_checkBox, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
+    connect(m_checkBox, &QAbstractButton::toggled, this, &QtBoolEdit::toggled);
     setFocusProxy(m_checkBox);
     m_checkBox->setText(tr("True"));
 }
@@ -293,7 +290,7 @@ bool QtBoolEdit::blockCheckBoxSignals(bool block)
     return m_checkBox->blockSignals(block);
 }
 
-void QtBoolEdit::mousePressEvent(QMouseEvent *event)
+void QtBoolEdit::mousePressEvent(QMouseEvent* event)
 {
     if (event->buttons() == Qt::LeftButton) {
         m_checkBox->click();

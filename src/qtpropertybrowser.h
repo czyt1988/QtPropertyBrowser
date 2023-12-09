@@ -1,41 +1,5 @@
-/****************************************************************************
-**
-** Copyright (C) 2016 The Qt Company Ltd.
-** Contact: https://www.qt.io/licensing/
-**
-** This file is part of the tools applications of the Qt Toolkit.
-**
-** $QT_BEGIN_LICENSE:LGPL$
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see https://www.qt.io/terms-conditions. For further
-** information use the contact form at https://www.qt.io/contact-us.
-**
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 3 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL3 included in the
-** packaging of this file. Please review the following information to
-** ensure the GNU Lesser General Public License version 3 requirements
-** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
-**
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 2.0 or (at your option) the GNU General
-** Public license version 3 or any later version approved by the KDE Free
-** Qt Foundation. The licenses are as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
-** included in the packaging of this file. Please review the following
-** information to ensure the GNU General Public License requirements will
-** be met: https://www.gnu.org/licenses/gpl-2.0.html and
-** https://www.gnu.org/licenses/gpl-3.0.html.
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
+// Copyright (C) 2016 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
 #ifndef QTPROPERTYBROWSER_H
 #define QTPROPERTYBROWSER_H
@@ -158,9 +122,9 @@ public:
     explicit QtAbstractEditorFactory(QObject* parent) : QtAbstractEditorFactoryBase(parent)
     {
     }
-    QWidget* createEditor(QtProperty* property, QWidget* parent)
+    QWidget* createEditor(QtProperty* property, QWidget* parent) override
     {
-        for (PropertyManager* manager : qAsConst(m_managers)) {
+        for (PropertyManager* manager : std::as_const(m_managers)) {
             if (manager == property->propertyManager()) {
                 return createEditor(manager, property, parent);
             }
@@ -173,13 +137,13 @@ public:
             return;
         m_managers.insert(manager);
         connectPropertyManager(manager);
-        connect(manager, SIGNAL(destroyed(QObject*)), this, SLOT(managerDestroyed(QObject*)));
+        connect(manager, &QObject::destroyed, this, &QtAbstractEditorFactory< PropertyManager >::managerDestroyed);
     }
     void removePropertyManager(PropertyManager* manager)
     {
         if (!m_managers.contains(manager))
             return;
-        disconnect(manager, SIGNAL(destroyed(QObject*)), this, SLOT(managerDestroyed(QObject*)));
+        disconnect(manager, &QObject::destroyed, this, &QtAbstractEditorFactory< PropertyManager >::managerDestroyed);
         disconnectPropertyManager(manager);
         m_managers.remove(manager);
     }
@@ -190,7 +154,7 @@ public:
     PropertyManager* propertyManager(QtProperty* property) const
     {
         QtAbstractPropertyManager* manager = property->propertyManager();
-        for (PropertyManager* m : qAsConst(m_managers)) {
+        for (PropertyManager* m : std::as_const(m_managers)) {
             if (m == manager) {
                 return m;
             }
@@ -202,9 +166,9 @@ protected:
     virtual void connectPropertyManager(PropertyManager* manager)                                  = 0;
     virtual QWidget* createEditor(PropertyManager* manager, QtProperty* property, QWidget* parent) = 0;
     virtual void disconnectPropertyManager(PropertyManager* manager)                               = 0;
-    void managerDestroyed(QObject* manager)
+    void managerDestroyed(QObject* manager) override
     {
-        for (PropertyManager* m : qAsConst(m_managers)) {
+        for (PropertyManager* m : std::as_const(m_managers)) {
             if (m == manager) {
                 m_managers.remove(m);
                 return;
@@ -213,9 +177,9 @@ protected:
     }
 
 private:
-    void breakConnection(QtAbstractPropertyManager* manager)
+    void breakConnection(QtAbstractPropertyManager* manager) override
     {
-        for (PropertyManager* m : qAsConst(m_managers)) {
+        for (PropertyManager* m : std::as_const(m_managers)) {
             if (m == manager) {
                 removePropertyManager(m);
                 return;
@@ -299,10 +263,6 @@ private:
     QScopedPointer< QtAbstractPropertyBrowserPrivate > d_ptr;
     Q_DECLARE_PRIVATE(QtAbstractPropertyBrowser)
     Q_DISABLE_COPY_MOVE(QtAbstractPropertyBrowser)
-    Q_PRIVATE_SLOT(d_func(), void slotPropertyInserted(QtProperty*, QtProperty*, QtProperty*))
-    Q_PRIVATE_SLOT(d_func(), void slotPropertyRemoved(QtProperty*, QtProperty*))
-    Q_PRIVATE_SLOT(d_func(), void slotPropertyDestroyed(QtProperty*))
-    Q_PRIVATE_SLOT(d_func(), void slotPropertyDataChanged(QtProperty*))
 };
 
 QT_END_NAMESPACE

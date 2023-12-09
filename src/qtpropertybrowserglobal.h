@@ -14,6 +14,4 @@
 #define QT_QTPROPERTYBROWSER_EXPORT
 #endif
 
-
-
 #endif  // SARIBBONGLOBAL_H

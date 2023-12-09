@@ -111,6 +111,11 @@ target_link_libraries(${QtPropertyBrowser_LIB_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
 )
 
+if(${QT_VERSION_MAJOR} EQUAL 6)
+   find_package(Qt6 REQUIRED COMPONENTS Core5Compat)
+   target_link_libraries(${QtPropertyBrowser_LIB_NAME} PRIVATE Qt6::Core5Compat)
+endif()
+
 # List of header that should go though moc
 SET(KIT_HEADERS_MOC_SRCS
   qtbuttonpropertybrowser.h
