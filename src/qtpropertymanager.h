@@ -12,8 +12,11 @@ class QDate;
 class QTime;
 class QDateTime;
 class QLocale;
+#if QT_VERSION_MAJOR >= 6
 class QRegularExpression;
-
+#else
+class QRegExp;
+#endif
 class QT_QTPROPERTYBROWSER_EXPORT QtGroupPropertyManager : public QtAbstractPropertyManager
 {
     Q_OBJECT
@@ -141,15 +144,26 @@ public:
     ~QtStringPropertyManager();
 
     QString value(const QtProperty* property) const;
+#if QT_VERSION_MAJOR >= 6
     QRegularExpression regExp(const QtProperty* property) const;
+#else
+    QRegExp regExp(const QtProperty* property) const;
+#endif
 
 public Q_SLOTS:
     void setValue(QtProperty* property, const QString& val);
+#if QT_VERSION_MAJOR >= 6
     void setRegExp(QtProperty* property, const QRegularExpression& regExp);
+#else
+    void setRegExp(QtProperty* property, const QRegExp& regExp);
+#endif
 Q_SIGNALS:
     void valueChanged(QtProperty* property, const QString& val);
+#if QT_VERSION_MAJOR >= 6
     void regExpChanged(QtProperty* property, const QRegularExpression& regExp);
-
+#else
+    void regExpChanged(QtProperty* property, const QRegExp& regExp);
+#endif
 protected:
     QString valueText(const QtProperty* property) const override;
     void initializeProperty(QtProperty* property) override;
@@ -175,6 +189,7 @@ public:
     QDate maximum(const QtProperty* property) const;
 
 public Q_SLOTS:
+#if QT_VERSION_MAJOR >= 6
     void setValue(QtProperty* property, QDate val);
     void setMinimum(QtProperty* property, QDate minVal);
     void setMaximum(QtProperty* property, QDate maxVal);
@@ -182,6 +197,15 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty* property, QDate val);
     void rangeChanged(QtProperty* property, QDate minVal, QDate maxVal);
+#else
+    void setValue(QtProperty* property, const QDate& val);
+    void setMinimum(QtProperty* property, const QDate& minVal);
+    void setMaximum(QtProperty* property, const QDate& maxVal);
+    void setRange(QtProperty* property, const QDate& minVal, const QDate& maxVal);
+Q_SIGNALS:
+    void valueChanged(QtProperty* property, const QDate& val);
+    void rangeChanged(QtProperty* property, const QDate& minVal, const QDate& maxVal);
+#endif
 
 protected:
     QString valueText(const QtProperty* property) const override;
@@ -204,12 +228,17 @@ public:
     ~QtTimePropertyManager();
 
     QTime value(const QtProperty* property) const;
-
+#if QT_VERSION_MAJOR >= 6
 public Q_SLOTS:
     void setValue(QtProperty* property, QTime val);
 Q_SIGNALS:
     void valueChanged(QtProperty* property, QTime val);
-
+#else
+public Q_SLOTS:
+    void setValue(QtProperty* property, const QTime& val);
+Q_SIGNALS:
+    void valueChanged(QtProperty* property, const QTime& val);
+#endif
 protected:
     QString valueText(const QtProperty* property) const override;
     void initializeProperty(QtProperty* property) override;

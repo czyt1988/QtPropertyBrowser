@@ -9,8 +9,11 @@
 #include <QtGui/QIcon>
 #include "qtpropertybrowserglobal.h"
 QT_BEGIN_NAMESPACE
-
+#if QT_VERSION_MAJOR >= 6
 class QRegularExpression;
+#else
+typedef QMap< int, QIcon > QtIconMap;
+#endif
 
 class QtVariantPropertyManager;
 

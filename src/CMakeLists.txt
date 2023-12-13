@@ -76,20 +76,32 @@ SET(KIT_HEADER_PRIVATE
   qtpropertybrowserutils_p.h
 )
 
-SET(KIT_SOURCE
-  qtbuttonpropertybrowser.cpp
-  qteditorfactory.cpp
-  qtgroupboxpropertybrowser.cpp
-  qtpropertybrowser.cpp
-  qtpropertybrowserutils.cpp
-  qtpropertymanager.cpp
-  qttreepropertybrowser.cpp
-  qtvariantproperty.cpp
-  )
-
+if(${QT_VERSION_MAJOR} EQUAL 6)
+    SET(KIT_SOURCE
+      qt6buttonpropertybrowser.cpp
+      qt6editorfactory.cpp
+      qt6groupboxpropertybrowser.cpp
+      qt6propertybrowser.cpp
+      qt6propertybrowserutils.cpp
+      qt6propertymanager.cpp
+      qt6treepropertybrowser.cpp
+      qt6variantproperty.cpp
+    )
+else()
+    SET(KIT_SOURCE
+      qt5buttonpropertybrowser.cpp
+      qt5editorfactory.cpp
+      qt5groupboxpropertybrowser.cpp
+      qt5propertybrowser.cpp
+      qt5propertybrowserutils.cpp
+      qt5propertymanager.cpp
+      qt5treepropertybrowser.cpp
+      qt5variantproperty.cpp
+    )
+endif()
 SET(KIT_RESOURCE
   qtpropertybrowser.qrc
-  )
+)
 
 
 add_library(${QtPropertyBrowser_LIB_NAME} SHARED
