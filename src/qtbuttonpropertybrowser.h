@@ -35,6 +35,11 @@ private:
     QScopedPointer< QtButtonPropertyBrowserPrivate > d_ptr;
     Q_DECLARE_PRIVATE(QtButtonPropertyBrowser)
     Q_DISABLE_COPY_MOVE(QtButtonPropertyBrowser)
+#if QT_VERSION_MAJOR == 5
+    Q_PRIVATE_SLOT(d_func(), void slotUpdate())
+    Q_PRIVATE_SLOT(d_func(), void slotEditorDestroyed())
+    Q_PRIVATE_SLOT(d_func(), void slotToggled(bool))
+#endif
 };
 
 QT_END_NAMESPACE

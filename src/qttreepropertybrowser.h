@@ -81,6 +81,12 @@ private:
     QScopedPointer< QtTreePropertyBrowserPrivate > d_ptr;
     Q_DECLARE_PRIVATE(QtTreePropertyBrowser)
     Q_DISABLE_COPY_MOVE(QtTreePropertyBrowser)
+#if QT_VERSION_MAJOR == 5
+    Q_PRIVATE_SLOT(d_func(), void slotCollapsed(const QModelIndex &))
+    Q_PRIVATE_SLOT(d_func(), void slotExpanded(const QModelIndex &))
+    Q_PRIVATE_SLOT(d_func(), void slotCurrentBrowserItemChanged(QtBrowserItem *))
+    Q_PRIVATE_SLOT(d_func(), void slotCurrentTreeItemChanged(QTreeWidgetItem *, QTreeWidgetItem *))
+#endif
 };
 
 QT_END_NAMESPACE

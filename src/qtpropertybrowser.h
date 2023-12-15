@@ -263,6 +263,14 @@ private:
     QScopedPointer< QtAbstractPropertyBrowserPrivate > d_ptr;
     Q_DECLARE_PRIVATE(QtAbstractPropertyBrowser)
     Q_DISABLE_COPY_MOVE(QtAbstractPropertyBrowser)
+#if QT_VERSION_MAJOR == 5
+    Q_PRIVATE_SLOT(d_func(), void slotPropertyInserted(QtProperty *,
+                            QtProperty *, QtProperty *))
+    Q_PRIVATE_SLOT(d_func(), void slotPropertyRemoved(QtProperty *,
+                            QtProperty *))
+    Q_PRIVATE_SLOT(d_func(), void slotPropertyDestroyed(QtProperty *))
+    Q_PRIVATE_SLOT(d_func(), void slotPropertyDataChanged(QtProperty *))
+#endif
 };
 
 QT_END_NAMESPACE

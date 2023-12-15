@@ -27,6 +27,10 @@ private:
     QScopedPointer< QtGroupBoxPropertyBrowserPrivate > d_ptr;
     Q_DECLARE_PRIVATE(QtGroupBoxPropertyBrowser)
     Q_DISABLE_COPY_MOVE(QtGroupBoxPropertyBrowser)
+#if QT_VERSION_MAJOR == 5
+    Q_PRIVATE_SLOT(d_func(), void slotUpdate())
+    Q_PRIVATE_SLOT(d_func(), void slotEditorDestroyed())
+#endif
 };
 
 QT_END_NAMESPACE
