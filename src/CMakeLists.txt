@@ -76,32 +76,20 @@ SET(KIT_HEADER_PRIVATE
   qtpropertybrowserutils_p.h
 )
 
-if(${QT_VERSION_MAJOR} EQUAL 6)
-    SET(KIT_SOURCE
-      qt6buttonpropertybrowser.cpp
-      qt6editorfactory.cpp
-      qt6groupboxpropertybrowser.cpp
-      qt6propertybrowser.cpp
-      qt6propertybrowserutils.cpp
-      qt6propertymanager.cpp
-      qt6treepropertybrowser.cpp
-      qt6variantproperty.cpp
-    )
-else()
-    SET(KIT_SOURCE
-      qt5buttonpropertybrowser.cpp
-      qt5editorfactory.cpp
-      qt5groupboxpropertybrowser.cpp
-      qt5propertybrowser.cpp
-      qt5propertybrowserutils.cpp
-      qt5propertymanager.cpp
-      qt5treepropertybrowser.cpp
-      qt5variantproperty.cpp
-    )
-endif()
+SET(KIT_SOURCE
+  ${CMAKE_CURRENT_SOURCE_DIR}/qt${QT_VERSION_MAJOR}/qtbuttonpropertybrowser.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/qt${QT_VERSION_MAJOR}/qteditorfactory.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/qt${QT_VERSION_MAJOR}/qtgroupboxpropertybrowser.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/qt${QT_VERSION_MAJOR}/qtpropertybrowser.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/qt${QT_VERSION_MAJOR}/qtpropertybrowserutils.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/qt${QT_VERSION_MAJOR}/qtpropertymanager.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/qt${QT_VERSION_MAJOR}/qttreepropertybrowser.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/qt${QT_VERSION_MAJOR}/qtvariantproperty.cpp
+)
 SET(KIT_RESOURCE
   qtpropertybrowser.qrc
 )
+
 
 
 add_library(${QtPropertyBrowser_LIB_NAME} SHARED
@@ -128,17 +116,7 @@ if(${QT_VERSION_MAJOR} EQUAL 6)
    target_link_libraries(${QtPropertyBrowser_LIB_NAME} PRIVATE Qt6::Core5Compat)
 endif()
 
-# List of header that should go though moc
-SET(KIT_HEADERS_MOC_SRCS
-  qtbuttonpropertybrowser.h
-  qteditorfactory.h
-  qtgroupboxpropertybrowser.h
-  qtpropertybrowser.h
-  qtpropertybrowserutils_p.h
-  qtpropertymanager.h
-  qttreepropertybrowser.h
-  qtvariantproperty.h
-)
+
 
 ########################################################
 # 设置target属性，以及Qt的moc

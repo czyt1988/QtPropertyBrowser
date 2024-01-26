@@ -1058,4 +1058,4 @@ void QtTreePropertyBrowser::editItem(QtBrowserItem* item)
 QT_END_NAMESPACE
 
 #include "moc_qttreepropertybrowser.cpp"
-#include "qt5treepropertybrowser.moc"
+#include "qttreepropertybrowser.moc"

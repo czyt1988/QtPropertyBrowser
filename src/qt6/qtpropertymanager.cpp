@@ -776,8 +776,7 @@ void QtIntPropertyManager::setValue(QtProperty* property, int val)
 void QtIntPropertyManager::setMinimum(QtProperty* property, int minVal)
 {
     setMinimumValue< int, QtIntPropertyManagerPrivate, QtIntPropertyManager, int, QtIntPropertyManagerPrivate::Data >(this,
-                                                                                                                      d_ptr
-                                                                                                                          .data(),
+                                                                                                                      d_ptr.data(),
                                                                                                                       &QtIntPropertyManager::propertyChanged,
                                                                                                                       &QtIntPropertyManager::valueChanged,
                                                                                                                       &QtIntPropertyManager::rangeChanged,
@@ -797,8 +796,7 @@ void QtIntPropertyManager::setMinimum(QtProperty* property, int minVal)
 void QtIntPropertyManager::setMaximum(QtProperty* property, int maxVal)
 {
     setMaximumValue< int, QtIntPropertyManagerPrivate, QtIntPropertyManager, int, QtIntPropertyManagerPrivate::Data >(this,
-                                                                                                                      d_ptr
-                                                                                                                          .data(),
+                                                                                                                      d_ptr.data(),
                                                                                                                       &QtIntPropertyManager::propertyChanged,
                                                                                                                       &QtIntPropertyManager::valueChanged,
                                                                                                                       &QtIntPropertyManager::rangeChanged,
@@ -1156,17 +1154,13 @@ void QtDoublePropertyManager::setDecimals(QtProperty* property, int prec)
 */
 void QtDoublePropertyManager::setMinimum(QtProperty* property, double minVal)
 {
-    setMinimumValue< double,
-                     QtDoublePropertyManagerPrivate,
-                     QtDoublePropertyManager,
-                     double,
-                     QtDoublePropertyManagerPrivate::Data >(this,
-                                                            d_ptr.data(),
-                                                            &QtDoublePropertyManager::propertyChanged,
-                                                            &QtDoublePropertyManager::valueChanged,
-                                                            &QtDoublePropertyManager::rangeChanged,
-                                                            property,
-                                                            minVal);
+    setMinimumValue< double, QtDoublePropertyManagerPrivate, QtDoublePropertyManager, double, QtDoublePropertyManagerPrivate::Data >(this,
+                                                                                                                                     d_ptr.data(),
+                                                                                                                                     &QtDoublePropertyManager::propertyChanged,
+                                                                                                                                     &QtDoublePropertyManager::valueChanged,
+                                                                                                                                     &QtDoublePropertyManager::rangeChanged,
+                                                                                                                                     property,
+                                                                                                                                     minVal);
 }
 
 /*!
@@ -1180,17 +1174,13 @@ void QtDoublePropertyManager::setMinimum(QtProperty* property, double minVal)
 */
 void QtDoublePropertyManager::setMaximum(QtProperty* property, double maxVal)
 {
-    setMaximumValue< double,
-                     QtDoublePropertyManagerPrivate,
-                     QtDoublePropertyManager,
-                     double,
-                     QtDoublePropertyManagerPrivate::Data >(this,
-                                                            d_ptr.data(),
-                                                            &QtDoublePropertyManager::propertyChanged,
-                                                            &QtDoublePropertyManager::valueChanged,
-                                                            &QtDoublePropertyManager::rangeChanged,
-                                                            property,
-                                                            maxVal);
+    setMaximumValue< double, QtDoublePropertyManagerPrivate, QtDoublePropertyManager, double, QtDoublePropertyManagerPrivate::Data >(this,
+                                                                                                                                     d_ptr.data(),
+                                                                                                                                     &QtDoublePropertyManager::propertyChanged,
+                                                                                                                                     &QtDoublePropertyManager::valueChanged,
+                                                                                                                                     &QtDoublePropertyManager::rangeChanged,
+                                                                                                                                     property,
+                                                                                                                                     maxVal);
 }
 
 /*!
@@ -1767,8 +1757,7 @@ void QtDatePropertyManager::setValue(QtProperty* property, QDate val)
 void QtDatePropertyManager::setMinimum(QtProperty* property, QDate minVal)
 {
     setMinimumValue< QDate, QtDatePropertyManagerPrivate, QtDatePropertyManager, QDate, QtDatePropertyManagerPrivate::Data >(this,
-                                                                                                                             d_ptr
-                                                                                                                                 .data(),
+                                                                                                                             d_ptr.data(),
                                                                                                                              &QtDatePropertyManager::propertyChanged,
                                                                                                                              &QtDatePropertyManager::valueChanged,
                                                                                                                              &QtDatePropertyManager::rangeChanged,
@@ -1788,8 +1777,7 @@ void QtDatePropertyManager::setMinimum(QtProperty* property, QDate minVal)
 void QtDatePropertyManager::setMaximum(QtProperty* property, QDate maxVal)
 {
     setMaximumValue< QDate, QtDatePropertyManagerPrivate, QtDatePropertyManager, QDate, QtDatePropertyManagerPrivate::Data >(this,
-                                                                                                                             d_ptr
-                                                                                                                                 .data(),
+                                                                                                                             d_ptr.data(),
                                                                                                                              &QtDatePropertyManager::propertyChanged,
                                                                                                                              &QtDatePropertyManager::valueChanged,
                                                                                                                              &QtDatePropertyManager::rangeChanged,
@@ -4484,10 +4472,10 @@ QString QtRectFPropertyManager::valueText(const QtProperty* property) const
     const QRectF v = it.value().val;
     const int dec  = it.value().decimals;
     return QString(tr("[(%1, %2), %3 x %4]")
-                       .arg(QString::number(v.x(), 'f', dec),
-                            QString::number(v.y(), 'f', dec),
-                            QString::number(v.width(), 'f', dec),
-                            QString::number(v.height(), 'f', dec)));
+                           .arg(QString::number(v.x(), 'f', dec),
+                                QString::number(v.y(), 'f', dec),
+                                QString::number(v.width(), 'f', dec),
+                                QString::number(v.height(), 'f', dec)));
 }
 
 /*!
