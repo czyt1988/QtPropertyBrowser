@@ -98,7 +98,8 @@ add_library(${QtPropertyBrowser_LIB_NAME} SHARED
   ${KIT_SOURCE}
   ${KIT_RESOURCE}
 )
-
+# 启用别名，通过QtPropertyBrowser::QtPropertyBrowser 引入
+add_library(${QtPropertyBrowser_LIB_NAME}::${QtPropertyBrowser_LIB_NAME} ALIAS ${QtPropertyBrowser_LIB_NAME})
 # 构建库定义的宏
 target_compile_definitions(${QtPropertyBrowser_LIB_NAME} PRIVATE QT_QTPROPERTYBROWSER_MAKE_LIB)
 
