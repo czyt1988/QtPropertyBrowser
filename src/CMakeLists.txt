@@ -147,6 +147,8 @@ target_include_directories(${QtPropertyBrowser_LIB_NAME} PUBLIC
 ########################################################
 # 安装
 ########################################################
+include(CMakePackageConfigHelpers)
+
 message(STATUS "${QtPropertyBrowser_LIB_NAME} install dir is : ${CMAKE_INSTALL_PREFIX}")
 # xxx.cmake.in中，会让此变量和“${PACKAGE_PREFIX_DIR}/”进行拼接，也就是${PACKAGE_PREFIX_DIR}/@QtPropertyBrowser_LIB_INCLUDE_INSTALL_DIR@
 # PACKAGE_PREFIX_DIR = ${CMAKE_CURRENT_LIST_DIR}/../..
@@ -164,32 +166,32 @@ write_basic_package_version_file(
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/QtPropertyBrowserConfig.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/${QtPropertyBrowser_LIB_NAME}Config.cmake"
-  INSTALL_DESTINATION lib/cmake/${QtPropertyBrowser_LIB_NAME}
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${QtPropertyBrowser_LIB_NAME}
   PATH_VARS QtPropertyBrowser_LIB_INCLUDE_INSTALL_DIR
 )
 
 # 声明导出target的名称
 install(TARGETS ${QtPropertyBrowser_LIB_NAME}
     EXPORT ${QtPropertyBrowser_LIB_NAME}Targets
-    INCLUDES DESTINATION include/${QtPropertyBrowser_LIB_NAME}
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${QtPropertyBrowser_LIB_NAME}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 install(EXPORT "${QtPropertyBrowser_LIB_NAME}Targets"
     FILE ${QtPropertyBrowser_LIB_NAME}Targets.cmake # 导出的文件基准名。
-    DESTINATION lib/cmake/${QtPropertyBrowser_LIB_NAME}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${QtPropertyBrowser_LIB_NAME}
 )
 
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/${QtPropertyBrowser_LIB_NAME}Config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/${QtPropertyBrowser_LIB_NAME}ConfigVersion.cmake"
-    DESTINATION lib/cmake/${QtPropertyBrowser_LIB_NAME}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${QtPropertyBrowser_LIB_NAME}
 )
 
 install(FILES
     ${KIT_HEADER}
-    DESTINATION include/${QtPropertyBrowser_LIB_NAME}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${QtPropertyBrowser_LIB_NAME}
     COMPONENT headers
 )
 
@@ -246,7 +248,7 @@ set(KIT_INCLASS_INCLUDES
 )
 install(FILES
     ${KIT_INCLASS_INCLUDES}
-    DESTINATION include/${QtPropertyBrowser_LIB_NAME}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${QtPropertyBrowser_LIB_NAME}
     COMPONENT headers
 )
 
