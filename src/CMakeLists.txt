@@ -180,6 +180,7 @@ install(TARGETS ${QtPropertyBrowser_LIB_NAME}
 )
 install(EXPORT "${QtPropertyBrowser_LIB_NAME}Targets"
     FILE ${QtPropertyBrowser_LIB_NAME}Targets.cmake # 导出的文件基准名。
+    NAMESPACE ${QtPropertyBrowser_LIB_NAME}::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${QtPropertyBrowser_LIB_NAME}
 )
 
