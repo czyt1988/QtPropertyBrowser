@@ -148,16 +148,17 @@ target_include_directories(${QtPropertyBrowser_LIB_NAME} PUBLIC
 # 安装
 ########################################################
 include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
 
 message(STATUS "${QtPropertyBrowser_LIB_NAME} install dir is : ${CMAKE_INSTALL_PREFIX}")
 # xxx.cmake.in中，会让此变量和“${PACKAGE_PREFIX_DIR}/”进行拼接，也就是${PACKAGE_PREFIX_DIR}/@QtPropertyBrowser_LIB_INCLUDE_INSTALL_DIR@
 # PACKAGE_PREFIX_DIR = ${CMAKE_CURRENT_LIST_DIR}/../..
 # 最终变为${CMAKE_CURRENT_LIST_DIR}/../../include/${QtPropertyBrowser_LIB_NAME}
-set(QtPropertyBrowser_LIB_INCLUDE_INSTALL_DIR include/${QtPropertyBrowser_LIB_NAME})
+set(QtPropertyBrowser_LIB_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR}/${QtPropertyBrowser_LIB_NAME})
 
 # Generate library version info which will generate xxxConfigVersion.cmake,
 # the ${PACKAGE_VERSION} is the version defined in project()
-include(CMakePackageConfigHelpers)
+
 write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/${QtPropertyBrowser_LIB_NAME}ConfigVersion.cmake
     VERSION ${QtPropertyBrowser_VERSION}
