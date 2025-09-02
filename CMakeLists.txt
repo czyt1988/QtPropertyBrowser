@@ -1,4 +1,4 @@
-# QtPropertyBrowser cmake 
+﻿# QtPropertyBrowser cmake 
 # 可适用于Qt5/6
 CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
 set(QtPropertyBrowser_VERSION_MAJOR 2)
@@ -26,7 +26,7 @@ OPTION(QtPropertyBrowser_BUILD_EXAMPLES "Build examples" OFF)
 
 set(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "add a postfix, usually d on windows")
 set(CMAKE_RELEASE_POSTFIX "" CACHE STRING "add a postfix, usually empty on windows")
-set(CMAKE_RELWITHDEBINFO_POSTFIX "rd" CACHE STRING "add a postfix, usually empty on windows")
+set(CMAKE_RELWITHDEBINFO_POSTFIX "" CACHE STRING "add a postfix, usually empty on windows")
 set(CMAKE_MINSIZEREL_POSTFIX "s" CACHE STRING "add a postfix, usually empty on windows")
 
 # c++标准，要求为11
